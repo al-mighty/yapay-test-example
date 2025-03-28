@@ -1,0 +1,53 @@
+type User {
+  id: ID!
+  email: String!
+  name: String!
+  transactions: [Transaction!]!
+}
+
+type Transaction {
+  id: ID!
+  date: String!
+  type: TransactionType!
+  amount: Float!
+  status: TransactionStatus!
+  description: String!
+}
+
+enum TransactionType {
+  INCOME
+  EXPENSE
+}
+
+enum TransactionStatus {
+  COMPLETED
+  PENDING
+  FAILED
+}
+
+type AuthPayload {
+  token: String!
+  user: User!
+}
+
+type Query {
+  me: User
+  transactions(
+    type: TransactionType
+    status: TransactionStatus
+    startDate: String
+    endDate: String
+  ): [Transaction!]!
+}
+
+type Mutation {
+  signup(email: String!, password: String!, name: String!): AuthPayload!
+  login(email: String!, password: String!): AuthPayload!
+  createTransaction(
+    type: TransactionType!
+    amount: Float!
+    description: String!
+    date: String!
+  ): Transaction!
+  updateTransactionStatus(id: ID!, status: TransactionStatus!): Transaction!
+} 
